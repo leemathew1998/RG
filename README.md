@@ -1,5 +1,6 @@
 # Random Gradient
-
+## Image Classification
+### We use ResNet34 to train on cifar10
 ## Pix2Pix
 Unpaired Image-to-Image Translation with Conditional Adversarial Networks.
 ### Code
