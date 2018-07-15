@@ -48,72 +48,6 @@ testloader = torch.utils.data.DataLoader(testset, batch_size=128, shuffle=False,
 
 def poly(base_lr, epoch,max_iter=100,power=0.9):
     return base_lr*((1-float(epoch+1)/max_iter)**(power))
-# def Cyclical_strategy(epoch):
-#     if epoch<=50:
-#         return epoch*2/50
-#     else:
-#         return 4 - 2*epoch/50
-# def Normal_strategy(epoch):
-#     if epoch<=50:
-#         return 0.1
-#     elif epoch>50 and epoch <=75:
-#         return 0.01
-#     else:
-#         return 0.001
-# def Cyclical_strategy_2_2(epoch):
-#     if epoch<=25:
-#         return 2*epoch/25
-#     elif epoch>25 and epoch <=50:
-#         return 4.1 - 2*epoch/25
-#     elif epoch>50 and epoch <=75:
-#         return 2*epoch/25 - 4
-#     else:
-#         return 8 - 2*epoch/25
-# def Cyclical_strategy_4_2(epoch):
-#     if epoch<=10 or epoch>20 and epoch <=30 or epoch>40 and epoch <=50 or epoch>60 and epoch <=70 or epoch>80 and epoch <=90:
-#         if epoch%10 == 0:
-#             return 2
-#         else:
-#             return epoch%10/5
-#     else:
-#         if epoch%10 == 0:
-#             return 0.2
-#         else:
-#             return 2 - epoch%10/5
-# list = [2/5, 4/5, 6/5, 8/5, 2, 2, 8/5, 6/5, 4/5, 2/5,
-#        2/5, 4/5, 6/5, 8/5, 2, 2, 8/5, 6/5, 4/5, 2/5,
-#        2/5, 4/5, 6/5, 8/5, 2, 2, 8/5, 6/5, 4/5, 2/5,
-#        2/5, 4/5, 6/5, 8/5, 2, 2, 8/5, 6/5, 4/5, 2/5,
-#        2/5, 4/5, 6/5, 8/5, 2, 2, 8/5, 6/5, 4/5, 2/5,
-#        2/5, 4/5, 6/5, 8/5, 2, 2, 8/5, 6/5, 4/5, 2/5,
-#        2/5, 4/5, 6/5, 8/5, 2, 2, 8/5, 6/5, 4/5, 2/5,
-#        2/5, 4/5, 6/5, 8/5, 2, 2, 8/5, 6/5, 4/5, 2/5,
-#        2/5, 4/5, 6/5, 8/5, 2, 2, 8/5, 6/5, 4/5, 2/5,
-#        2/5, 4/5, 6/5, 8/5, 2, 2, 8/5, 6/5, 4/5, 2/5,]
-# def Cyclical_strategy_10_2(epoch):
-#     return list[epoch]
-# list = [0.5, 1, 2, 1, 0.5,
-#         0.5, 1, 2, 1, 0.5,
-#         0.5, 1, 2, 1, 0.5,
-#         0.5, 1, 2, 1, 0.5,
-#         0.5, 1, 2, 1, 0.5,
-#         0.5, 1, 2, 1, 0.5,
-#         0.5, 1, 2, 1, 0.5,
-#         0.5, 1, 2, 1, 0.5,
-#         0.5, 1, 2, 1, 0.5,
-#         0.5, 1, 2, 1, 0.5,
-#         0.5, 1, 2, 1, 0.5,
-#         0.5, 1, 2, 1, 0.5,
-#         0.5, 1, 2, 1, 0.5,
-#         0.5, 1, 2, 1, 0.5,
-#         0.5, 1, 2, 1, 0.5,
-#         0.5, 1, 2, 1, 0.5,
-#         0.5, 1, 2, 1, 0.5,
-#         0.5, 1, 2, 1, 0.5,
-#         0.5, 1, 2, 1, 0.5,
-#         0.5, 1, 2, 1, 0.5,]
-# def Cyclical_strategy_20_2(epoch):
-#     return list[epoch]
 # Model
 print('==> Building model..')
 net = ResNet34()
@@ -141,13 +75,8 @@ def train(epoch):
         outputs = net(inputs)
         loss = criterion(outputs, targets)
 
-        loss_ = loss * Cyclical_strategy_20_2(epoch)  # Here represents the Random Gradient
-        # if batch_idx%2 == 0:
-        #     M_loss = loss * random.random()
-        #     M_loss.backward(retain_graph=True)
-        # else:
-        #     M_loss = M_loss + random.random() * loss
-        #     M_loss.backward()
+        loss_ = loss * random.random()  # Here represents the Random Gradient
+        
         loss_.backward()
         optimizer.step()
         train_loss += loss_.item()
@@ -183,18 +112,18 @@ def test(epoch):
     acc = 100.*correct/total
     if acc > best_acc:
         print('Saving..')
-        open('./test/Cyclical_strategy_20_2.txt', 'a').write(str(epoch) + '_' + str(acc) + ',')
+        open('./random_gradient_accuracy.txt', 'a').write(str(epoch) + '_' + str(acc) + ',')
         best_acc = acc
     print('best_acc:', best_acc)
 
 
 def adjust_learning_rate(optimizer, epoch, net):
-    lr = Cyclical_strategy_20_2(epoch)    # This is normal way to reduce the LR, you can replace it with CLR
+    lr = poly(0.1, epoch)    # This is normal way to reduce the LR, you can replace it with CLR
     print('current lr: ', lr)
     optimizer = optim.SGD(net.parameters(), lr=lr, momentum=0.95, weight_decay=0.0001)
 if __name__ == '__main__':
     for epoch in range(0, 100):
-        adjust_learning_rate(optimizer,epoch,net)
         train(epoch)
         test(epoch)
+        adjust_learning_rate(optimizer,epoch,net)
         
