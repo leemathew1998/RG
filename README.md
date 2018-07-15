@@ -1,6 +1,8 @@
 # Random Gradient
 ## Image Classification
-### We use ResNet34 to train on cifar10
+We use ResNet34 to train on cifar10
+## Semantic Segmentation
+We use [PSPNet](https://arxiv.org/abs/1612.01105), [esNet-DUC+HDC](https://arxiv.org/pdf/1702.08502.pdf) to training on pascl voc dataset.
 ## Pix2Pix
 Unpaired Image-to-Image Translation with Conditional Adversarial Networks.
 ### Code
