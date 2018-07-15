@@ -17,13 +17,7 @@ from datasets import voc
 from models import *
 
 from utils import check_mkdir, evaluate, AverageMeter, CrossEntropyLoss2d
-# from segnet import *
-# from MY_NET import *
-from RSPPNet import *
 from tqdm import tqdm as tqdm
-# from SEG_NET import *
-# from NORMAL_PSP import *
-# from model import *
 cudnn.benchmark = True
 from torchvision.transforms import *
 from torchvision.transforms import ToTensor, ToPILImage
@@ -88,11 +82,7 @@ def get_iou(pred,gt):
     return Aiou
 
 def main(train_args):
-	# net = mynet().cuda()
-	# net = DeepNet(num_classes=voc.num_classes).cuda()
-	# net = ResNetDUCHDC(num_classes=voc.num_classes).cuda()
 	net = PSPNet(num_classes=voc.num_classes).cuda()
-	# net = RSPPNet(num_classes=voc.num_classes).cuda()
 	if len(train_args['snapshot']) == 0:
 		curr_epoch = 1
 		train_args['best_record'] = {'epoch': 0, 'val_loss': 1e10, 'acc': 0, 'acc_cls': 0, 'mean_iu': 0, 'fwavacc': 0}
@@ -159,12 +149,6 @@ def main(train_args):
 		validate(val_loader, net, criterion, optimizer, epoch, train_args, restore_transform, visualize)
 		adjust_learning_rate(optimizer,epoch,net,train_args)
 		# scheduler.step(val_loss)
-    # if iter % iter_size  == 0:
-    #     optimizer.step()
-    #     lr_ = lr_poly(base_lr,iter,max_iter,0.9)
-    #     print '(poly lr policy) learning rate',lr_
-    #     optimizer = optim.SGD([{'params': get_1x_lr_params_NOscale(model), 'lr': lr_ }, {'params': get_10x_lr_params(model), 'lr': 10*lr_} ], lr = lr_, momentum = 0.9,weight_decay = weight_decay)
-    #     optimizer.zero_grad()
     
 def train(train_loader, net, criterion, optimizer, epoch, train_args):
 	# interp = nn.Upsample(size=256, mode='bilinear')
