@@ -1,8 +1,8 @@
-# RG
-Random Gradient
-### Pix2Pix
-_Unpaired Image-to-Image Translation with Conditional Adversarial Networks_
+# Random Gradient
 
+### Pix2Pix
+Unpaired Image-to-Image Translation with Conditional Adversarial Networks_
+We used the code of [PyTorch-GAN](https://github.com/eriklindernoren/PyTorch-GAN) to modify.
 #### Authors
 Phillip Isola, Jun-Yan Zhu, Tinghui Zhou, Alexei A. Efros
 
@@ -14,11 +14,3 @@ We investigate conditional adversarial networks as a general-purpose solution to
 <p align="center">
     <img src="http://eriklindernoren.se/images/pix2pix_architecture.png" width="640"\>
 </p>
-
-#### Run Example
-```
-$ cd data/
-$ bash download_pix2pix_dataset.sh facades
-$ cd ../implementations/pix2pix/
-$ python3 pix2pix.py --dataset_name facades
-```
