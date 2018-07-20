@@ -120,7 +120,8 @@ def test(epoch):
 def adjust_learning_rate(optimizer, epoch, net):
     lr = poly(0.1, epoch)    # This is normal way to reduce the LR, you can replace it with CLR
     print('current lr: ', lr)
-    optimizer = optim.SGD(net.parameters(), lr=lr, momentum=0.95, weight_decay=0.0001)
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = lr
 if __name__ == '__main__':
     for epoch in range(0, 100):
         train(epoch)
