@@ -57,7 +57,7 @@ if device == 'cuda':
     cudnn.benchmark = True
 
 criterion = nn.CrossEntropyLoss().cuda()
-optimizer = optim.SGD(net.parameters(), lr=args.lr, momentum=0.95, weight_decay=0.0001)
+optimizer = optim.SGD(net.parameters(), lr=args.lr, momentum=0.5, weight_decay=0.0001)
 
 M_loss = 0
 # Training
